@@ -5,11 +5,11 @@
 #'
 #' @return A length-one character vector containing the formatted snippet.
 #' @export
-#' @seealso [paste_sm_s4_code()]
+#' @seealso [insert_snakemake_s4_snippet()]
 #'
 #' @examples
-#' cat(create_sm_s4())
-create_sm_s4 <- function() {
+#' cat(build_snakemake_s4_snippet())
+build_snakemake_s4_snippet <- function() {
   template_path <- system.file(
     "templates",
     "snakemake_s4_template.R",

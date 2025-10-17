@@ -1,4 +1,4 @@
-test_that("create_sm_s4() returns the packaged template", {
+test_that("build_snakemake_s4_snippet() returns the packaged template", {
   template_path <- system.file(
     "templates",
     "snakemake_s4_template.R",
@@ -11,5 +11,5 @@ test_that("create_sm_s4() returns the packaged template", {
   )
 
   expected <- paste(readLines(template_path, warn = FALSE), collapse = "\n")
-  expect_equal(create_sm_s4(), expected)
+  expect_equal(build_snakemake_s4_snippet(), expected)
 })
