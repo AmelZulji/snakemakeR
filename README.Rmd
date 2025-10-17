@@ -1,0 +1,98 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# snakemakeR
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+`snakemakeR` helps R-first analysts capture the small but repetitive step of
+drafting a minimal Snakemake S4 scaffold. Instead of copying code between
+projects, you can pull in a vetted template or paste it directly into the
+RStudio editor and immediately focus on the parts of the pipeline that matter.
+
+## Why snakemakeR?
+
+- Works entirely in R, making it easy to slot into existing scripts.
+- Keeps the S4 class definition in one packaged template so fixes stay in sync.
+- Provides both textual and RStudio editor helpers, depending on your workflow.
+
+## Installation
+
+You can install the development version of snakemakeR from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("AmelZulji/snakemakeR")
+```
+
+## Usage
+
+Retrieve the packaged Snakemake S4 scaffold as a single string. This is handy
+when you want to review or tweak the snippet before inserting it elsewhere.
+
+```{r pull-template, eval = TRUE}
+library(snakemakeR)
+
+cat(create_sm_s4())
+```
+
+If you are working inside RStudio, you can paste the same scaffold directly into
+the active source document at the cursor location.
+
+```{r paste-template, eval = FALSE}
+if (rstudioapi::isAvailable()) {
+  paste_sm_s4_code()
+}
+```
+
+Both helpers pull from the same underlying template, so you only need to update
+`inst/templates/snakemake_s4_template.R` when the S4 definition changes.
+
+## Template preview
+
+Here is the default snippet shipped with the package:
+
+``` r
+setClass(
+  "Snakemake",
+  slots = list(
+    input = "list",
+    output = "list",
+    params = "list"
+  )
+)
+
+snakemake <- new(
+  "Snakemake",
+  input = list(
+    input1 = ""
+  ),
+  output = list(
+    output1 = ""
+  ),
+  params = list(
+    param1 = ""
+  )
+)
+```
+
+## Development
+
+- Run `devtools::load_all()` while iterating on the template to pick up changes.
+- Execute `devtools::test()` (or `testthat::test_dir("tests/testthat")`) to
+  ensure the installed template stays wired correctly.
+- Render this README with `devtools::build_readme()` so `README.md` stays in
+  sync with `README.Rmd`.

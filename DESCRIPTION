@@ -1,11 +1,17 @@
 Package: snakemakeR
-Title: What the Package Does (One Line, Title Case)
+Title: Generate Snakemake S4 Snippets for R Scripts
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Amel", "Zulji", , "zuljiamel1991@gmail.com", role = c("aut", "cre"))
+Description: Helpers for drafting Snakemake S4 boilerplate alongside R
+    analyses. Use 'create_sm_s4()' to retrieve the snippet as text, or
+    'paste_sm_s4_code()' to insert it directly into the active RStudio editor.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Imports: 
+    rstudioapi
