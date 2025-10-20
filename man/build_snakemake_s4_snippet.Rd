@@ -2,19 +2,25 @@
 % Please edit documentation in R/build_snakemake_s4_snippet.R
 \name{build_snakemake_s4_snippet}
 \alias{build_snakemake_s4_snippet}
-\title{Generate Snakemake S4 snippet}
+\title{Generate snippet for snakemake S4 object}
 \usage{
-build_snakemake_s4_snippet()
+build_snakemake_s4_snippet(n_input = NULL, n_output = NULL, n_param = NULL)
+}
+\arguments{
+\item{n_input}{The number of input items to generate.}
+
+\item{n_output}{The number of output items to generate.}
+
+\item{n_param}{The number of parameter items to generate.}
 }
 \value{
-A length-one character vector containing the formatted snippet.
+A string of class glue containing the formatted snippet.
 }
 \description{
-Returns the code skeleton for defining a \code{Snakemake} S4 class and a
-corresponding instance. The snippet is ready to paste into an R script.
+The function is used to produce a snippet for constructing a mock snakemake S4 object. The snippet is properly formated and ready to be pasted in the script. The user then can specify the desired input, output and params.
 }
 \examples{
-cat(build_snakemake_s4_snippet())
+build_snakemake_s4_snippet(n_input = 2, n_output = 2, n_param = 1)
 }
 \seealso{
 \code{\link[=insert_snakemake_s4_snippet]{insert_snakemake_s4_snippet()}}
