@@ -4,8 +4,9 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Amel", "Zulji", , "zuljiamel1991@gmail.com", role = c("aut", "cre"))
 Description: Helpers for drafting Snakemake S4 boilerplate alongside R
-    analyses. Use 'create_sm_s4()' to retrieve the snippet as text, or
-    'paste_sm_s4_code()' to insert it directly into the active RStudio editor.
+    analyses. Use 'build_snakemake_s4_snippet()' to retrieve the snippet as
+    text, or 'insert_snakemake_s4_snippet()' to add it directly to the active
+    RStudio editor.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

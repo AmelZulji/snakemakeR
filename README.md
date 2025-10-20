@@ -8,15 +8,14 @@
 
 `snakemakeR` helps R-first analysts capture the small but repetitive
 step of drafting a minimal Snakemake S4 scaffold. Instead of copying
-code between projects, you can pull in a vetted template or paste it
+code between projects, you can generate a vetted snippet or paste it
 directly into the RStudio editor and immediately focus on the parts of
 the pipeline that matter.
 
 ## Why snakemakeR?
 
 - Works entirely in R, making it easy to slot into existing scripts.
-- Keeps the S4 class definition in one packaged template so fixes stay
-  in sync.
+- Keeps the S4 class definition in one helper so fixes stay in sync.
 - Provides both textual and RStudio editor helpers, depending on your
   workflow.
 
@@ -32,14 +31,15 @@ pak::pak("AmelZulji/snakemakeR")
 
 ## Usage
 
-Retrieve the packaged Snakemake S4 scaffold as a single string. This is
-handy when you want to review or tweak the snippet before inserting it
-elsewhere.
+Retrieve the Snakemake S4 scaffold as a single string. This is handy
+when you want to review or tweak the snippet before inserting it
+elsewhere, and you can control how many placeholder entries are
+generated for each slot.
 
 ``` r
 library(snakemakeR)
 
-cat(create_sm_s4())
+cat(build_snakemake_s4_snippet(n_input = 2, n_output = 1, n_param = 1))
 #> setClass(
 #>   "Snakemake",
 #>   slots = list(
@@ -52,7 +52,8 @@ cat(create_sm_s4())
 #> snakemake <- new(
 #>   "Snakemake",
 #>   input = list(
-#>     input1 = ""
+#>     input1 = "",
+#>     input2 = ""
 #>   ),
 #>   output = list(
 #>     output1 = ""
@@ -68,13 +69,12 @@ directly into the active source document at the cursor location.
 
 ``` r
 if (rstudioapi::isAvailable()) {
-  paste_sm_s4_code()
+  insert_snakemake_s4_snippet(n_input = 2, n_output = 1, n_param = 1)
 }
 ```
 
-Both helpers pull from the same underlying template, so you only need to
-update `inst/templates/snakemake_s4_template.R` when the S4 definition
-changes.
+Both helpers call the same builder, so any adjustments to the snippet
+logic are reflected across the package automatically.
 
 ## Template preview
 
@@ -106,9 +106,9 @@ snakemake <- new(
 
 ## Development
 
-- Run `devtools::load_all()` while iterating on the template to pick up
-  changes.
+- Run `devtools::load_all()` while iterating on the snippet builder to
+  pick up changes.
 - Execute `devtools::test()` (or `testthat::test_dir("tests/testthat")`)
-  to ensure the installed template stays wired correctly.
+  to ensure the generated snippet stays wired correctly.
 - Render this README with `devtools::build_readme()` so `README.md`
   stays in sync with `README.Rmd`.

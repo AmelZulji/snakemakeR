@@ -1,12 +1,13 @@
-#' Generate snippet for snakemake S4 object
+#' Generate snippet for a Snakemake S4 object
 #'
-#' The function is used to produce a snippet for constructing a mock snakemake S4 object. The snippet is properly formated and ready to be pasted in the script. The user then can specify the desired input, output and params.
+#' Build a formatted snippet for a minimal Snakemake S4 class definition and
+#' instance. You can control how many placeholder entries are generated for the
+#' `input`, `output`, and `params` slots.
 #'
-#' @param n_input The number of input items to generate.
-#' @param n_output The number of output items to generate.
-#' @param n_param The number of parameter items to generate.
+#' @param n_input,n_output,n_param Single non-negative integers indicating how
+#'   many placeholder items to generate for each slot.
 #'
-#' @return A string of class glue containing the formatted snippet.
+#' @return A [`glue::glue`] string containing the formatted snippet.
 #' @export
 #' @seealso [insert_snakemake_s4_snippet()]
 #'
@@ -58,4 +59,3 @@ build_snakemake_s4_snippet <- function(n_input = NULL, n_output = NULL, n_param 
   # return the snippet
   return(snippet_fmt_glue)
 }
-
