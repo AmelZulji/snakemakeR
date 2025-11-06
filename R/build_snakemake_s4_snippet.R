@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' build_snakemake_s4_snippet(n_input = 2, n_output = 2, n_param = 1)
-build_snakemake_s4_snippet <- function(n_input = NULL, n_output = NULL, n_param = NULL) {
+build_snakemake_s4_snippet <- function(n_input = 1, n_output = 1, n_param = 1) {
   # Generate the string for each list item.
   inputs <- glue::glue('input{seq_len(n_input)} = ""')
   outputs <- glue::glue('output{seq_len(n_output)} = ""')
@@ -27,7 +27,8 @@ build_snakemake_s4_snippet <- function(n_input = NULL, n_output = NULL, n_param 
   # Use the collapsed strings to build the snippet.
   snippet <-
     glue::glue(
-    'setClass(
+    'if (interactive()) {{
+    setClass(
       "Snakemake",
       slots = list(
         input = "list",
@@ -47,7 +48,8 @@ build_snakemake_s4_snippet <- function(n_input = NULL, n_output = NULL, n_param 
       params = list(
 {params_str}
       )
-    )'
+    )
+  }}'
   )
 
   # Format the snippet

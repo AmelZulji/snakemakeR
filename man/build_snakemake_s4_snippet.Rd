@@ -2,22 +2,21 @@
 % Please edit documentation in R/build_snakemake_s4_snippet.R
 \name{build_snakemake_s4_snippet}
 \alias{build_snakemake_s4_snippet}
-\title{Generate snippet for snakemake S4 object}
+\title{Generate snippet for a Snakemake S4 object}
 \usage{
-build_snakemake_s4_snippet(n_input = NULL, n_output = NULL, n_param = NULL)
+build_snakemake_s4_snippet(n_input = 1, n_output = 1, n_param = 1)
 }
 \arguments{
-\item{n_input}{The number of input items to generate.}
-
-\item{n_output}{The number of output items to generate.}
-
-\item{n_param}{The number of parameter items to generate.}
+\item{n_input, n_output, n_param}{Single non-negative integers indicating how
+many placeholder items to generate for each slot.}
 }
 \value{
-A string of class glue containing the formatted snippet.
+A \code{\link[glue:glue]{glue::glue}} string containing the formatted snippet.
 }
 \description{
-The function is used to produce a snippet for constructing a mock snakemake S4 object. The snippet is properly formated and ready to be pasted in the script. The user then can specify the desired input, output and params.
+Build a formatted snippet for a minimal Snakemake S4 class definition and
+instance. You can control how many placeholder entries are generated for the
+\code{input}, \code{output}, and \code{params} slots.
 }
 \examples{
 build_snakemake_s4_snippet(n_input = 2, n_output = 2, n_param = 1)

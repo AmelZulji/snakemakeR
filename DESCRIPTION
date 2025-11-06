@@ -16,5 +16,7 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     glue,
+    purrr,
+    rlang,
     rstudioapi,
     styler (>= 1.11.0)
