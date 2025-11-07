@@ -14,26 +14,6 @@ out1
 
 library(purrr)
 
-expr(write_snakemake_rule(rule_name = "test", !!!out1))
+expr(build_rule(rule_name = "test", !!!out1)) |> eval()
 
-x1 <- build_config_section(rule_name = "test", params = out1["params"])
-filename <- "test"
-con <- file(filename, "w")
-
-yaml::write_yaml(config, con)
-close(con)
-
-?yaml::write_yaml()
-
-
-
-library(yaml)
-x <- list(
-  dataset = "schirmer2019",
-  samples = c("A1", "A2", "A3"),
-  params = list(threshold = 0.2, max_iter = 50)
-)
-
-x1
-
-write_yaml(x, "config.yaml")
+expr(write_config(rule_name = "yey_rule", params =  !!!out1[3])) |> eval()

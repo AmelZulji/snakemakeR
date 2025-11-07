@@ -71,16 +71,26 @@ write_rule <- function(rule, path, append = TRUE) {
   invisible(path)
 }
 
-write_config <- function(params, config_path = "config/config.yaml") {
+write_config <- function(rule_name, params, config_path = "config/config.yaml") {
   stopifnot("`params` is not a list" = is.list(params))
   stopifnot("`params` is not a named list" = rlang::is_named(params))
 
   if (fs::file_exists(config_path)) {
-    x <- yaml::read_yaml(config_path)
+    if (fs::is_file_empty(config_path)) {
+      x <- list()
+    } else {
+      x <- yaml::read_yaml(config_path)
+    }
   } else {
     fs::path_dir(config_path) |> fs::dir_create()
     x <- list()
   }
+  print("test")
+  params <- setNames(list(params), rule_name)
+
   x <- modifyList(x, params)
   yaml::write_yaml(x = x, file = config_path)
 }
+
+write_config(rule_name = "test", params = list(na.rm = TRUE))
+
