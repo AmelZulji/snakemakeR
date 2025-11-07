@@ -14,5 +14,4 @@ is_snakemake_project <- function(path = ".") {
   }
 }
 
-is_snakemake_project()
 

@@ -1,15 +1,5 @@
 if (interactive()) {
-  setClass(
-    "Snakemake",
-    slots = list(
-      input = "list",
-      output = "list",
-      params = "list"
-    )
-  )
-
-  snakemake <- new(
-    Class = "Snakemake",
+  snakemake <- create_snakemake_object(
     input = list(
       input1 = "inst/extdata/sample_data.csv"
     ),
