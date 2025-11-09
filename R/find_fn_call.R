@@ -57,12 +57,10 @@ find_fn_call <- function(x, fn_name) {
     msg <- paste(as.character(x), "is constant")
     print(msg)
     res <- NULL
-
   } else if (is.symbol(x)) {
     msg <- paste(as.character(x), "is symbol")
     print(msg)
     res <- NULL
-
   } else if (is.call(x)) {
     msg <- paste(rlang::expr_text(x), "is call")
     print(msg)
@@ -77,14 +75,13 @@ find_fn_call <- function(x, fn_name) {
       list(cond_call),
       purrr::map(
         .x = seq_along(x),
-        \(i) find_fn_call(x = x[[i]], fn_name = fn_name))
+        \(i) find_fn_call(x = x[[i]], fn_name = fn_name)
       )
-
+    )
   } else if (is.pairlist(x)) {
     msg <- paste(as.character(x), "is pairlist")
     print(msg)
     res <- NULL
-
   } else {
     ot <- typeof(x)
     msg <- paste(ot, "(unknown type)")
@@ -93,7 +90,6 @@ find_fn_call <- function(x, fn_name) {
   }
 
   res |> recurse_compact() |> recurse_flatten()
-
 }
 
 #' Find matching calls in multiple expressions
@@ -115,6 +111,7 @@ find_fn_calls <- function(x, fn_name) {
     stop("x must be a list of expression(s)", call. = FALSE)
   }
   # recurse_compact(purrr::map(x, \(x) find_fn_call(x, fn_name = fn_name)))
-  purrr::map(x, \(x) find_fn_call(x, fn_name = fn_name)) |> recurse_compact() |> recurse_flatten()
+  purrr::map(x, \(x) find_fn_call(x, fn_name = fn_name)) |>
+    recurse_compact() |>
+    recurse_flatten()
 }
-

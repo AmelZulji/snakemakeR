@@ -15,7 +15,11 @@
 #' if (rstudioapi::isAvailable()) {
 #'   insert_snakemake_s4_snippet(n_input = 3)
 #' }
-insert_snakemake_s4_snippet <- function(n_input = 2L, n_output = 1L, n_param = 1L) {
+insert_snakemake_s4_snippet <- function(
+  n_input = 2L,
+  n_output = 1L,
+  n_param = 1L
+) {
   if (!rstudioapi::isAvailable()) {
     stop(
       "rstudioapi is not available. Run this function from within RStudio.",

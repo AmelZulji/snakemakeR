@@ -5,13 +5,15 @@
 \title{Create a mock Snakemake project structure}
 \usage{
 mock_snakemake_project(
-  path = fs::path_temp("snakemake_project"),
-  snakefile_location = c("root", "workflow"),
-  include_config = TRUE
+  project_dir = "snakemake_project",
+  snakefile_path = "workflow/Snakefile",
+  config_path = "config/config.yaml",
+  script_path = "workflow/scripts/analysis.R",
+  rule_path = "workflow/rules/test.smk"
 )
 }
 \arguments{
-\item{path}{Optional directory to populate. Defaults to a new temporary dir.}
+\item{project_dir}{Optional directory to populate. Defaults to a new temporary dir.}
 
 \item{snakefile_location}{Where to place the Snakefile: either
 \code{"root"} (default) or \code{"workflow"}.}
@@ -19,7 +21,7 @@ mock_snakemake_project(
 \item{include_config}{Logical; create \code{config/config.yaml}.}
 }
 \value{
-A path to the mock project directory.
+A project_dir to the mock project directory.
 }
 \description{
 Helper for tests/examples that need a minimal Snakemake project layout.

@@ -27,7 +27,7 @@ build_snakemake_s4_snippet <- function(n_input = 1, n_output = 1, n_param = 1) {
   # Use the collapsed strings to build the snippet.
   snippet <-
     glue::glue(
-    'if (interactive()) {{
+      'if (interactive()) {{
     setClass(
       "Snakemake",
       slots = list(
@@ -50,7 +50,7 @@ build_snakemake_s4_snippet <- function(n_input = 1, n_output = 1, n_param = 1) {
       )
     )
   }}'
-  )
+    )
 
   # Format the snippet
   snippet_fmt <- styler::style_text(text = snippet)

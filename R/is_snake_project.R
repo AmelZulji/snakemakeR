@@ -13,5 +13,3 @@ is_snakemake_project <- function(path = ".") {
     FALSE
   }
 }
-
-

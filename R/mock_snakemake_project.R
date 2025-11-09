@@ -4,36 +4,26 @@
 #' Creates a temporary directory (if none supplied) with a Snakefile and config
 #' file so utilities like \code{is_snakemake_project()} can run against it.
 #'
-#' @param path Optional directory to populate. Defaults to a new temporary dir.
+#' @param project_dir Optional directory to populate. Defaults to a new temporary dir.
 #' @param snakefile_location Where to place the Snakefile: either
 #'   \code{"root"} (default) or \code{"workflow"}.
 #' @param include_config Logical; create \code{config/config.yaml}.
 #'
-#' @return A path to the mock project directory.
+#' @return A project_dir to the mock project directory.
 #' @export
 mock_snakemake_project <- function(
-    path = fs::path_temp("snakemake_project"),
-    snakefile_location = c("root", "workflow"),
-    include_config = TRUE) {
-  fs::dir_create(path, recurse = TRUE)
+    project_dir = "snakemake_project",
+    snakefile_path = "workflow/Snakefile",
+    config_path = "config/config.yaml",
+    script_path = "workflow/scripts/analysis.R",
+    rule_path = "workflow/rules/test.smk"
+) {
+  file_paths <- fs::path(project_dir, c(snakefile_path, config_path, script_path, rule_path))
 
-  snakefile_location <- match.arg(snakefile_location)
+  fs::dir_create(fs::path_dir(file_paths), recurse = TRUE)
+  fs::file_create(file_paths)
 
-  if (identical(snakefile_location, "root")) {
-    fs::file_create(fs::path(path, "Snakefile"))
-  }
-
-  if (identical(snakefile_location, "workflow")) {
-    workflow_path <- fs::path(path, "workflow")
-    fs::dir_create(workflow_path, recurse = TRUE)
-    fs::file_create(fs::path(workflow_path, "Snakefile"))
-  }
-
-  if (isTRUE(include_config)) {
-    config_dir <- fs::path(path, "config")
-    fs::dir_create(config_dir, recurse = TRUE)
-    fs::file_create(fs::path(config_dir, "config.yaml"))
-  }
-
-  path
+  invisible(project_dir)
 }
+
+

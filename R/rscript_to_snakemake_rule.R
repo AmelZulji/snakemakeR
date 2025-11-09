@@ -1,11 +1,11 @@
 #' Build a Snakemake rule
 #'
-#' Convenience helper for writing snakemake rule from its components
+#' Convenience helper for writing a Snakemake rule from its components.
 #'
-#' @param script Path to the script to be executed
-#' @param rule_name Optional explicit rule name. Defaults to the script filename without extension.
-#' @param input,output Named lists mapping ponting to input and output files
+#' @param rule_name Explicit rule name. Defaults to the script filename without extension.
+#' @param input,output Named lists pointing to input and output files.
 #' @param params Named list of parameter identifiers. Each entry prints as a
+#' @param script Path to the script to be executed.
 #'   reference to the corresponding `config[["rule"]][["param"]]`.
 #'
 #' @return A single character string containing the formatted rule.
@@ -19,33 +19,57 @@
 #'   params = list(threshold = 0.05)
 #' )
 build_rule <- function(
-    script,
+  output,
+  script,
   rule_name = NULL,
   input = NULL,
-  output = NULL,
   params = NULL
 ) {
-  rule_name <- rule_name %||% script |> fs::path_file() |> fs::path_ext_remove()
-  rule_fmt <- glue::glue("rule {rule_name}:")
+  stopifnot("script doesnt exists" = fs::file_exists(script))
+
+  rule_name <- script |> fs::path_file() |> fs::path_ext_remove() %||% rule_name
+  rule_name_fmt <- glue::glue("rule {rule_name}:")
 
   input_fmt <- if (!is.null(input)) {
-    glue::glue('input: {names(input)} = "{input}"') |> glue::glue_collapse(sep = ", ")
+    stopifnot("input is not named list" = is.list(input) && !is.null(names(input)))
+    out <- glue::glue('{names(input)} = "{input}"') |> glue::glue_collapse(sep = ", ")
+    glue::glue("input: {out}")
   }
 
   output_fmt <- if (!is.null(output)) {
-    glue::glue('output: {names(output)} = "{output}"') |> glue::glue_collapse(sep = ", ")
+    stopifnot("output is not named list" = is.list(output) && !is.null(names(output)))
+    out <- glue::glue('{names(output)} = "{output}"') |> glue::glue_collapse(sep = ", ")
+    glue::glue("output: {out}")
   }
 
   params_fmt <- if (!is.null(params)) {
-    glue::glue('params: {names(params)} = config["{rule_name}"]["{names(params)}"]') |> glue::glue_collapse(sep = ", ")
+    stopifnot("params is not named list" = is.list(params) && !is.null(names(params)))
+    out <- glue::glue(
+      '{names(params)} = config["{rule_name}"]["{names(params)}"]'
+    ) |>
+      glue::glue_collapse(sep = ", ")
+
+    glue::glue("params: {out}")
   }
 
-  glue::glue_collapse(c(rule_fmt, input_fmt, params_fmt, output_fmt), sep = "\n\t")
+
+  script_rel_path <- fs::path_rel(script, start = "workflow/rules/")
+  script_fmt <- if (!is.null(script)) {
+    glue::glue(
+      'script: "{script_rel_path}"'
+    ) |>
+      glue::glue_collapse(sep = ", ")
+  }
+
+  glue::glue_collapse(
+    c(rule_name_fmt, input_fmt, params_fmt, output_fmt, script_fmt),
+    sep = "\n\t"
+  )
 }
 
 #' Write a Snakemake rule to disk
 #'
-#' Persists the character string returned by [build_snakemake_rule()] into a
+#' Persists the character string returned by [build_rule()] into a
 #' Snakefile. Directories along `path` are created if they do not exist.
 #'
 #' @param rule Character scalar containing the rule definition.
@@ -59,19 +83,42 @@ build_rule <- function(
 #'
 #' @examples
 #' tmp <- tempfile()
-#' rule <- build_snakemake_rule(
+#' rule <- build_rule(
 #'   script = "analysis.R",
 #'   input = list(data = "data/input.csv")
 #' )
 #' write_rule(rule, tmp)
-write_rule <- function(rule, path, append = TRUE) {
+write_rule <- function(rule, rule_path, append = TRUE) {
   stopifnot("`rule` is not character" = is.character(rule))
-  fs::dir_create(fs::path_dir(path))
-  write(x = rule, file = path)
-  invisible(path)
+  fs::dir_create(fs::path_dir(rule_path))
+  write(x = rule, file = rule_path)
+  invisible(rule_path)
 }
 
-write_config <- function(rule_name, params, config_path = "config/config.yaml") {
+#' Write or update a config entry corresponding to a Snakemake rule
+#'
+#' Creates (or updates) a YAML configuration file with the parameters required
+#' by a specific rule. Missing directories are created automatically.
+#'
+#' @param rule_name Character scalar used as the key in the configuration file.
+#' @param params Named list of parameter values associated with `rule_name`.
+#' @param config_path File path to the YAML configuration file.
+#'
+#' @return Invisibly returns `config_path`.
+#' @export
+#'
+#' @examples
+#' tmp_cfg <- tempfile(fileext = ".yaml")
+#' write_config(
+#'   rule_name = "analysis",
+#'   params = list(threshold = 0.05),
+#'   config_path = tmp_cfg
+#' )
+write_config <- function(
+  rule_name,
+  params,
+  config_path = "config/config.yaml"
+) {
   stopifnot("`params` is not a list" = is.list(params))
   stopifnot("`params` is not a named list" = rlang::is_named(params))
 
@@ -85,12 +132,37 @@ write_config <- function(rule_name, params, config_path = "config/config.yaml") 
     fs::path_dir(config_path) |> fs::dir_create()
     x <- list()
   }
-  print("test")
   params <- setNames(list(params), rule_name)
 
   x <- modifyList(x, params)
   yaml::write_yaml(x = x, file = config_path)
 }
 
-write_config(rule_name = "test", params = list(na.rm = TRUE))
-
+#' Convert an R script into a Snakemake rule scaffold
+#'
+#' Parses an R script that calls `create_snakemake_object()` and uses the
+#' extracted metadata to write both a Snakemake rule file and a config entry.
+#'
+#' @param script Path to the source R script.
+#' @param rule_name Optional explicit rule name; defaults to the script filename without extension.
+#'
+#' @return Invisibly returns `NULL`.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' rscript_to_rule("analysis.R")
+#' }
+rscript_to_rule <- function(script, rule_name = NULL) {
+  rule_name <- rule_name %||% script |> fs::path_file() |> fs::path_ext_remove()
+  rule_path <- glue::glue("workflow/rules/{rule_name}.smk")
+  exp <- parse(script) |> as.list()
+  out <-
+    find_fn_calls(x = exp, fn_name = "create_snakemake_object") |>
+    _[[1]] |>
+    rlang::call_args()
+  rule <- rlang::expr(build_rule(rule_name = rule_name, !!!out)) |> eval()
+  write_rule(rule = rule, path = rule_path)
+  rlang::expr(write_config(rule_name = rule_name, params = !!!out["params"])) |>
+    eval()
+}

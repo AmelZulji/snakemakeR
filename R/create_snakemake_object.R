@@ -13,9 +13,10 @@
 #'
 #' @importFrom methods isClass setClass new
 create_snakemake_object <- function(
-    input = list(),
-    output = list(),
-    params = list()) {
+  input = list(),
+  output = list(),
+  params = list()
+) {
   class_env <- .GlobalEnv
 
   class_exists <- methods::isClass("Snakemake") ||

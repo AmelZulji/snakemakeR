@@ -39,8 +39,9 @@ build_config_section <- function(rule_name, params = list()) {
 #' @rdname config_section_helpers
 #' @export
 append_config_section <- function(
-    config_path = fs::path("config", "config.yaml"),
-    section = list()) {
+  config_path = fs::path("config", "config.yaml"),
+  section = list()
+) {
   if (!length(section)) {
     return(invisible(config_path))
   }
@@ -79,9 +80,10 @@ append_config_section <- function(
 #' @rdname config_section_helpers
 #' @export
 append_params_to_config <- function(
-    config_path = fs::path("config", "config.yaml"),
-    rule_name,
-    params = list()) {
+  config_path = fs::path("config", "config.yaml"),
+  rule_name,
+  params = list()
+) {
   section <- build_config_section(rule_name, params)
   append_config_section(config_path, section)
 }
