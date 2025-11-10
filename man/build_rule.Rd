@@ -7,14 +7,13 @@
 build_rule(output, script, rule_name = NULL, input = NULL, params = NULL)
 }
 \arguments{
-\item{script}{Path to the script to be executed.
-reference to the corresponding \code{config[["rule"]][["param"]]}.}
+\item{script}{Path to the script.}
 
-\item{rule_name}{Explicit rule name. Defaults to the script filename without extension.}
+\item{rule_name}{Explicit rule name. Defaults to the script file name without extension.}
 
 \item{input, output}{Named lists pointing to input and output files.}
 
-\item{params}{Named list of parameter identifiers. Each entry prints as a}
+\item{params}{Named list of parameter.}
 }
 \value{
 A single character string containing the formatted rule.

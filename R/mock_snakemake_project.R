@@ -9,7 +9,6 @@
 #' @param config_path config path
 #' @param script_path script path
 #' @param rule_path rule path
-#'   \code{"root"} (default) or \code{"workflow"}.
 #' @return A project_dir to the mock project directory.
 #' @export
 mock_snakemake_project <- function(
