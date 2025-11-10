@@ -9,11 +9,11 @@ write_rule(rule, rule_path, append = TRUE)
 \arguments{
 \item{rule}{Character scalar containing the rule definition.}
 
+\item{rule_path}{File path that should store the rule.}
+
 \item{append}{Logical; append to an existing file (\code{TRUE}, default) or
 overwrite it (\code{FALSE}). Currently \code{append} is ignored and the file is
 overwritten.}
-
-\item{path}{File path that should store the rule.}
 }
 \value{
 Invisibly returns \code{path}.
@@ -21,12 +21,4 @@ Invisibly returns \code{path}.
 \description{
 Persists the character string returned by \code{\link[=build_rule]{build_rule()}} into a
 Snakefile. Directories along \code{path} are created if they do not exist.
-}
-\examples{
-tmp <- tempfile()
-rule <- build_rule(
-  script = "analysis.R",
-  input = list(data = "data/input.csv")
-)
-write_rule(rule, tmp)
 }

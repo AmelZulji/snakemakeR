@@ -22,11 +22,3 @@ A single character string containing the formatted rule.
 \description{
 Convenience helper for writing a Snakemake rule from its components.
 }
-\examples{
-build_rule(
-  script = "analysis.R",
-  input = list(data = "data/input.csv"),
-  output = list(report = "results/report.html"),
-  params = list(threshold = 0.05)
-)
-}

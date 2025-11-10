@@ -18,7 +18,3 @@ element of \code{x} that match \code{fn_name}.
 \description{
 Apply \code{find_fn_call()} to each element of a list of expressions.
 }
-\examples{
-exprs <- rlang::parse_exprs(c("foo(bar())", "baz()", "foo(1)"))
-find_fn_calls(exprs, "foo")
-}

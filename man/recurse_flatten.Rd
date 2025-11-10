@@ -15,6 +15,3 @@ A list with flattened hierarchy.
 \description{
 Apply \code{purrr::list_flatten()} recursively to reduce the depth of a list as much as possible.
 }
-\examples{
-recurse_flatten(list(1, NULL, list(2, NULL, 3), NULL))
-}

@@ -10,8 +10,6 @@
 #'
 #' @return An object of class \code{Snakemake}.
 #' @export
-#'
-#' @importFrom methods isClass setClass new
 create_snakemake_object <- function(
   input = list(),
   output = list(),

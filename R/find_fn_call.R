@@ -7,9 +7,6 @@
 #'
 #' @return A list with `NULL` or empty list elements removed.
 #' @export
-#'
-#' @examples
-#' recurse_compact(list(1, NULL, list(2, NULL, 3), NULL))
 recurse_compact <- function(x) {
   if (is.list(x)) {
     purrr::compact(purrr::map(x, recurse_compact))
@@ -25,10 +22,6 @@ recurse_compact <- function(x) {
 #' @param x A list, possibly containing nested lists.
 #'
 #' @return A list with flattened hierarchy.
-#' @export
-#'
-#' @examples
-#' recurse_flatten(list(1, NULL, list(2, NULL, 3), NULL))
 recurse_flatten <- function(x) {
   if (is.list(x)) {
     purrr::list_flatten(purrr::map(x, recurse_flatten))
@@ -48,10 +41,6 @@ recurse_flatten <- function(x) {
 #'
 #' @return A list of calls matching `fn_name`. Returns an empty list if no matches are found.
 #' @export
-#'
-#' @examples
-#' expr <- rlang::parse_expr("foo(bar(baz()), qux(), foo(1))")
-#' find_fn_call(expr, "foo")
 find_fn_call <- function(x, fn_name) {
   if (rlang::is_syntactic_literal(x)) {
     msg <- paste(as.character(x), "is constant")
@@ -102,10 +91,6 @@ find_fn_call <- function(x, fn_name) {
 #' @return A list in which each element contains the calls from the corresponding
 #'   element of `x` that match `fn_name`.
 #' @export
-#'
-#' @examples
-#' exprs <- rlang::parse_exprs(c("foo(bar())", "baz()", "foo(1)"))
-#' find_fn_calls(exprs, "foo")
 find_fn_calls <- function(x, fn_name) {
   if (!is.list(x)) {
     stop("x must be a list of expression(s)", call. = FALSE)

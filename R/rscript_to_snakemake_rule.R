@@ -10,14 +10,6 @@
 #'
 #' @return A single character string containing the formatted rule.
 #' @export
-#'
-#' @examples
-#' build_rule(
-#'   script = "analysis.R",
-#'   input = list(data = "data/input.csv"),
-#'   output = list(report = "results/report.html"),
-#'   params = list(threshold = 0.05)
-#' )
 build_rule <- function(
   output,
   script,
@@ -73,21 +65,13 @@ build_rule <- function(
 #' Snakefile. Directories along `path` are created if they do not exist.
 #'
 #' @param rule Character scalar containing the rule definition.
-#' @param path File path that should store the rule.
+#' @param rule_path File path that should store the rule.
 #' @param append Logical; append to an existing file (`TRUE`, default) or
 #'   overwrite it (`FALSE`). Currently `append` is ignored and the file is
 #'   overwritten.
 #'
 #' @return Invisibly returns `path`.
 #' @export
-#'
-#' @examples
-#' tmp <- tempfile()
-#' rule <- build_rule(
-#'   script = "analysis.R",
-#'   input = list(data = "data/input.csv")
-#' )
-#' write_rule(rule, tmp)
 write_rule <- function(rule, rule_path, append = TRUE) {
   stopifnot("`rule` is not character" = is.character(rule))
   fs::dir_create(fs::path_dir(rule_path))
@@ -108,12 +92,15 @@ write_rule <- function(rule, rule_path, append = TRUE) {
 #' @export
 #'
 #' @examples
+#' #' \dontrun{
 #' tmp_cfg <- tempfile(fileext = ".yaml")
 #' write_config(
 #'   rule_name = "analysis",
 #'   params = list(threshold = 0.05),
 #'   config_path = tmp_cfg
 #' )
+#' }
+
 write_config <- function(
   rule_name,
   params,
@@ -132,9 +119,9 @@ write_config <- function(
     fs::path_dir(config_path) |> fs::dir_create()
     x <- list()
   }
-  params <- setNames(list(params), rule_name)
+  params <- stats::setNames(list(params), rule_name)
 
-  x <- modifyList(x, params)
+  x <- utils::modifyList(x, params)
   yaml::write_yaml(x = x, file = config_path)
 }
 
@@ -148,11 +135,6 @@ write_config <- function(
 #'
 #' @return Invisibly returns `NULL`.
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' rscript_to_rule("analysis.R")
-#' }
 rscript_to_rule <- function(script, rule_name = NULL) {
   rule_name <- rule_name %||% script |> fs::path_file() |> fs::path_ext_remove()
   rule_path <- glue::glue("workflow/rules/{rule_name}.smk")
@@ -162,7 +144,7 @@ rscript_to_rule <- function(script, rule_name = NULL) {
     _[[1]] |>
     rlang::call_args()
   rule <- rlang::expr(build_rule(rule_name = rule_name, !!!out)) |> eval()
-  write_rule(rule = rule, path = rule_path)
+  write_rule(rule = rule, rule_path = rule_path)
   rlang::expr(write_config(rule_name = rule_name, params = !!!out["params"])) |>
     eval()
 }

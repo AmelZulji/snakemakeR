@@ -18,7 +18,3 @@ A list of calls matching \code{fn_name}. Returns an empty list if no matches are
 Recursively walks through an expression and collects calls whose function name matches
 \code{fn_name}.
 }
-\examples{
-expr <- rlang::parse_expr("foo(bar(baz()), qux(), foo(1))")
-find_fn_call(expr, "foo")
-}

@@ -15,10 +15,14 @@ mock_snakemake_project(
 \arguments{
 \item{project_dir}{Optional directory to populate. Defaults to a new temporary dir.}
 
-\item{snakefile_location}{Where to place the Snakefile: either
-\code{"root"} (default) or \code{"workflow"}.}
+\item{snakefile_path}{Where to place the Snakefile: either}
 
-\item{include_config}{Logical; create \code{config/config.yaml}.}
+\item{config_path}{config path}
+
+\item{script_path}{script path}
+
+\item{rule_path}{rule path
+\code{"root"} (default) or \code{"workflow"}.}
 }
 \value{
 A project_dir to the mock project directory.

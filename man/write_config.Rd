@@ -21,10 +21,12 @@ Creates (or updates) a YAML configuration file with the parameters required
 by a specific rule. Missing directories are created automatically.
 }
 \examples{
+#' \dontrun{
 tmp_cfg <- tempfile(fileext = ".yaml")
 write_config(
   rule_name = "analysis",
   params = list(threshold = 0.05),
   config_path = tmp_cfg
 )
+}
 }

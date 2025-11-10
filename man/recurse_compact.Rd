@@ -16,6 +16,3 @@ A list with \code{NULL} or empty list elements removed.
 Apply \code{purrr::compact()} recursively to drop \code{NULL} or empty list elements from a
 potentially nested list.
 }
-\examples{
-recurse_compact(list(1, NULL, list(2, NULL, 3), NULL))
-}

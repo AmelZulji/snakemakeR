@@ -18,8 +18,3 @@ Invisibly returns \code{NULL}.
 Parses an R script that calls \code{create_snakemake_object()} and uses the
 extracted metadata to write both a Snakemake rule file and a config entry.
 }
-\examples{
-\dontrun{
-rscript_to_rule("analysis.R")
-}
-}

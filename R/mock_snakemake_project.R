@@ -5,10 +5,11 @@
 #' file so utilities like \code{is_snakemake_project()} can run against it.
 #'
 #' @param project_dir Optional directory to populate. Defaults to a new temporary dir.
-#' @param snakefile_location Where to place the Snakefile: either
+#' @param snakefile_path Where to place the Snakefile: either
+#' @param config_path config path
+#' @param script_path script path
+#' @param rule_path rule path
 #'   \code{"root"} (default) or \code{"workflow"}.
-#' @param include_config Logical; create \code{config/config.yaml}.
-#'
 #' @return A project_dir to the mock project directory.
 #' @export
 mock_snakemake_project <- function(
