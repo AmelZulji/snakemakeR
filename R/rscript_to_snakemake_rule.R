@@ -19,31 +19,46 @@ build_rule <- function(
 ) {
   stopifnot("script doesnt exists" = fs::file_exists(script))
 
-  rule_name <- script |> fs::path_file() |> fs::path_ext_remove() %||% rule_name
+  rule_name <- rule_name %||% script |> fs::path_file() |> fs::path_ext_remove()
   rule_name_fmt <- glue::glue("rule {rule_name}:")
 
   input_fmt <- if (!is.null(input)) {
-    stopifnot("input is not named list" = is.list(input) && !is.null(names(input)))
-    out <- glue::glue('{names(input)} = "{input}"') |> glue::glue_collapse(sep = ", ")
+    stopifnot(
+      "input is not named list" = is.list(input) && !is.null(names(input))
+    )
+
+    out <-
+      glue::glue('{names(input)} = "{input}"') |>
+      glue::glue_collapse(sep = ", ")
+
     glue::glue("input: {out}")
   }
 
   output_fmt <- if (!is.null(output)) {
-    stopifnot("output is not named list" = is.list(output) && !is.null(names(output)))
-    out <- glue::glue('{names(output)} = "{output}"') |> glue::glue_collapse(sep = ", ")
+    stopifnot(
+      "output is not named list" = is.list(output) && !is.null(names(output))
+    )
+
+    out <-
+      glue::glue('{names(output)} = "{output}"') |>
+      glue::glue_collapse(sep = ", ")
+
     glue::glue("output: {out}")
   }
 
   params_fmt <- if (!is.null(params)) {
-    stopifnot("params is not named list" = is.list(params) && !is.null(names(params)))
-    out <- glue::glue(
-      '{names(params)} = config["{rule_name}"]["{names(params)}"]'
-    ) |>
+    stopifnot(
+      "params is not named list" = is.list(params) && !is.null(names(params))
+    )
+
+    out <-
+      glue::glue(
+        '{names(params)} = config["{rule_name}"]["{names(params)}"]'
+      ) |>
       glue::glue_collapse(sep = ", ")
 
     glue::glue("params: {out}")
   }
-
 
   script_rel_path <- fs::path_rel(script, start = "workflow/rules/")
   script_fmt <- if (!is.null(script)) {
@@ -92,7 +107,7 @@ write_rule <- function(rule, rule_path, append = TRUE) {
 #' @export
 #'
 #' @examples
-#' #' \dontrun{
+#' \dontrun{
 #' tmp_cfg <- tempfile(fileext = ".yaml")
 #' write_config(
 #'   rule_name = "analysis",

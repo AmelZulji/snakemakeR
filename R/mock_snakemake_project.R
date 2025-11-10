@@ -13,18 +13,19 @@
 #' @return A project_dir to the mock project directory.
 #' @export
 mock_snakemake_project <- function(
-    project_dir = "snakemake_project",
-    snakefile_path = "workflow/Snakefile",
-    config_path = "config/config.yaml",
-    script_path = "workflow/scripts/analysis.R",
-    rule_path = "workflow/rules/test.smk"
+  project_dir = "snakemake_project",
+  snakefile_path = "workflow/Snakefile",
+  config_path = "config/config.yaml",
+  script_path = "workflow/scripts/analysis.R",
+  rule_path = "workflow/rules/test.smk"
 ) {
-  file_paths <- fs::path(project_dir, c(snakefile_path, config_path, script_path, rule_path))
+  file_paths <- fs::path(
+    project_dir,
+    c(snakefile_path, config_path, script_path, rule_path)
+  )
 
   fs::dir_create(fs::path_dir(file_paths), recurse = TRUE)
   fs::file_create(file_paths)
 
   invisible(project_dir)
 }
-
-

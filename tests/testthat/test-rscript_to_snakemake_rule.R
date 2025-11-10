@@ -31,6 +31,3 @@ test_that("build_rule() properly chains input, output and params when they more 
     )
   )
 })
-
-
-
