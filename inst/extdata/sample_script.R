@@ -18,6 +18,7 @@ calculate_column_means <- function(df, na.rm = TRUE) {
   sapply(df[numeric_columns], \(x) mean(x, na.rm = na.rm))
 }
 
-sample_data <- read.csv(snakemake@input$input1, )
+sample_data <- read.csv(snakemake@input$input1)
 all_means <- calculate_column_means(sample_data, na.rm = snakemake@params$na.rm)
 print(all_means)
+
