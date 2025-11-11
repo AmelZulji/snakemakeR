@@ -4,14 +4,14 @@
 \alias{write_config}
 \title{Write or update a config entry corresponding to a Snakemake rule}
 \usage{
-write_config(rule_name, params, config_path = "config/config.yaml")
+write_config(params, config_path = "config/config.yaml", rule_name = NULL)
 }
 \arguments{
-\item{rule_name}{Character scalar used as the key in the configuration file.}
-
 \item{params}{Named list of parameter values associated with \code{rule_name}.}
 
 \item{config_path}{File path to the YAML configuration file.}
+
+\item{rule_name}{Character scalar used as the key in the configuration file.}
 }
 \value{
 Invisibly returns \code{config_path}.

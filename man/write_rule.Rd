@@ -2,21 +2,19 @@
 % Please edit documentation in R/rscript_to_snakemake_rule.R
 \name{write_rule}
 \alias{write_rule}
-\title{Write a Snakemake rule to disk}
+\title{Write a Snakemake rule}
 \usage{
 write_rule(rule, rule_path, append = TRUE)
 }
 \arguments{
 \item{rule}{Character scalar containing the rule definition.}
 
-\item{rule_path}{File path that should store the rule.}
+\item{rule_path}{File path to which rule should be written.}
 
-\item{append}{Logical; append to an existing file (\code{TRUE}, default) or
-overwrite it (\code{FALSE}). Currently \code{append} is ignored and the file is
-overwritten.}
+\item{append}{Logical; append to an existing file (\code{TRUE}, default) or overwrite it (\code{FALSE}).}
 }
 \value{
-Invisibly returns \code{path}.
+Invisibly returns \code{rule_path}.
 }
 \description{
 Persists the character string returned by \code{\link[=build_rule]{build_rule()}} into a

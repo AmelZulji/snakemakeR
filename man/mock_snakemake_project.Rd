@@ -13,7 +13,7 @@ mock_snakemake_project(
 )
 }
 \arguments{
-\item{project_dir}{Optional directory to populate. Defaults to a new temporary dir.}
+\item{project_dir}{Directory where to write a mock snakemake project. Defaults to \code{./snakemake_project}.}
 
 \item{snakefile_path}{Where to place the Snakefile: either}
 
@@ -21,8 +21,7 @@ mock_snakemake_project(
 
 \item{script_path}{script path}
 
-\item{rule_path}{rule path
-\code{"root"} (default) or \code{"workflow"}.}
+\item{rule_path}{rule path}
 }
 \value{
 A project_dir to the mock project directory.

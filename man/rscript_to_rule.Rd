@@ -2,7 +2,7 @@
 % Please edit documentation in R/rscript_to_snakemake_rule.R
 \name{rscript_to_rule}
 \alias{rscript_to_rule}
-\title{Convert an R script into a Snakemake rule scaffold}
+\title{Generate snakemake rule from R script.}
 \usage{
 rscript_to_rule(script, rule_name = NULL)
 }
