@@ -5,8 +5,6 @@
 
 <!-- badges: start -->
 
-[![Codecov test
-coverage](https://codecov.io/gh/AmelZulji/snakemakeR/graph/badge.svg)](https://app.codecov.io/gh/AmelZulji/snakemakeR)
 <!-- badges: end -->
 
 `snakemakeR` is workflow package helping to quickly write a snakemake
