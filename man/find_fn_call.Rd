@@ -2,19 +2,19 @@
 % Please edit documentation in R/find_fn_call.R
 \name{find_fn_call}
 \alias{find_fn_call}
-\title{Find matching calls within an expression}
+\title{Find a function call by its name in an expression}
 \usage{
 find_fn_call(x, fn_name)
 }
 \arguments{
-\item{x}{An expression to search.}
+\item{x}{An expression to be searched}
 
-\item{fn_name}{A string giving the function name to locate.}
+\item{fn_name}{A string giving the function name to be found}
 }
 \value{
 A list of calls matching \code{fn_name}. Returns an empty list if no matches are found.
 }
 \description{
-Recursively walks through an expression and collects calls whose function name matches
+Recursively walks an expression and collects calls whose function name matches
 \code{fn_name}.
 }

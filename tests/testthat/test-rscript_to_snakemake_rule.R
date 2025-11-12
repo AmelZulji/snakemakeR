@@ -1,4 +1,4 @@
-test_that("build_rule() produces properly fomrated rule", {
+test_that("build_rule() produces properly formated rule", {
   proj_dir <- mock_snakemake_project(project_dir = "testing")
   on.exit(fs::dir_delete(proj_dir), add = TRUE, after = FALSE)
 
@@ -8,7 +8,7 @@ test_that("build_rule() produces properly fomrated rule", {
   expect_snapshot(
     build_rule(
       output = list(out1 = "out.csv"),
-      script = "workflow/scripts/analysis.R",
+      script = "workflow/scripts/compute_mean.R",
       input = list(in1 = "input1.csv"),
       params = list(narm = TRUE)
     )
@@ -25,7 +25,7 @@ test_that("build_rule() properly chains input, output and params when they more 
   expect_snapshot(
     build_rule(
       output = list(out1 = "out.csv"),
-      script = "workflow/scripts/analysis.R",
+      script = "workflow/scripts/compute_mean.R",
       input = list(in1 = "input1.csv", in2 = "input2.csv"),
       params = list(narm = TRUE, mean = 10)
     )
@@ -42,7 +42,7 @@ test_that("build_rule() handles rule_name argument properly", {
   expect_snapshot(
     build_rule(
       output = list(out1 = "out.csv"),
-      script = "workflow/scripts/analysis.R",
+      script = "workflow/scripts/compute_mean.R",
       input = list(in1 = "input1.csv", in2 = "input2.csv"),
       params = list(narm = TRUE, mean = 10),
       rule_name = "test_rule"

@@ -4,6 +4,9 @@
 # snakemakeR
 
 <!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/AmelZulji/snakemakeR/graph/badge.svg)](https://app.codecov.io/gh/AmelZulji/snakemakeR)
 <!-- badges: end -->
 
 `snakemakeR` helps R-first analysts capture the small but repetitive
@@ -28,87 +31,3 @@ You can install the development version of snakemakeR from
 # install.packages("pak")
 pak::pak("AmelZulji/snakemakeR")
 ```
-
-## Usage
-
-Retrieve the Snakemake S4 scaffold as a single string. This is handy
-when you want to review or tweak the snippet before inserting it
-elsewhere, and you can control how many placeholder entries are
-generated for each slot.
-
-``` r
-library(snakemakeR)
-
-cat(build_snakemake_s4_snippet(n_input = 2, n_output = 1, n_param = 1))
-#> setClass(
-#>   "Snakemake",
-#>   slots = list(
-#>     input = "list",
-#>     output = "list",
-#>     params = "list"
-#>   )
-#> )
-#> 
-#> snakemake <- new(
-#>   "Snakemake",
-#>   input = list(
-#>     input1 = "",
-#>     input2 = ""
-#>   ),
-#>   output = list(
-#>     output1 = ""
-#>   ),
-#>   params = list(
-#>     param1 = ""
-#>   )
-#> )
-```
-
-If you are working inside RStudio, you can paste the same scaffold
-directly into the active source document at the cursor location.
-
-``` r
-if (rstudioapi::isAvailable()) {
-  insert_snakemake_s4_snippet(n_input = 2, n_output = 1, n_param = 1)
-}
-```
-
-Both helpers call the same builder, so any adjustments to the snippet
-logic are reflected across the package automatically.
-
-## Template preview
-
-Here is the default snippet shipped with the package:
-
-``` r
-setClass(
-  "Snakemake",
-  slots = list(
-    input = "list",
-    output = "list",
-    params = "list"
-  )
-)
-
-snakemake <- new(
-  "Snakemake",
-  input = list(
-    input1 = ""
-  ),
-  output = list(
-    output1 = ""
-  ),
-  params = list(
-    param1 = ""
-  )
-)
-```
-
-## Development
-
-- Run `devtools::load_all()` while iterating on the snippet builder to
-  pick up changes.
-- Execute `devtools::test()` (or `testthat::test_dir("tests/testthat")`)
-  to ensure the generated snippet stays wired correctly.
-- Render this README with `devtools::build_readme()` so `README.md`
-  stays in sync with `README.Rmd`.

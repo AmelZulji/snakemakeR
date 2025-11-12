@@ -4,27 +4,10 @@
 \alias{mock_snakemake_project}
 \title{Create a mock Snakemake project structure}
 \usage{
-mock_snakemake_project(
-  project_dir = "snakemake_project",
-  snakefile_path = "workflow/Snakefile",
-  config_path = "config/config.yaml",
-  script_path = "workflow/scripts/analysis.R",
-  rule_path = "workflow/rules/test.smk"
-)
+mock_snakemake_project(project_dir = "snakemake_project")
 }
 \arguments{
 \item{project_dir}{Directory where to write a mock snakemake project. Defaults to \code{./snakemake_project}.}
-
-\item{snakefile_path}{Where to place the Snakefile: either}
-
-\item{config_path}{config path}
-
-\item{script_path}{script path}
-
-\item{rule_path}{rule path}
-}
-\value{
-A project_dir to the mock project directory.
 }
 \description{
 Helper for tests/examples that need a minimal Snakemake project layout.

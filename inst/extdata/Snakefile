@@ -1,0 +1,16 @@
+# check working example at 20250107 on git
+from snakemake.utils import min_version
+min_version("8.0")
+import pandas as pd
+
+configfile: "config/config.yaml"
+container: "docker://rocker/tidyverse:4.5.1"
+
+# input data
+samples = pd.read_csv(config["sample_metadata"])["sample"].tolist()
+
+rule all:
+    input:
+        expand("results/{sample}.csv", sample=samples)
+
+include: "rules/compute_mean.smk"

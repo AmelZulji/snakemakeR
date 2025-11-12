@@ -13,6 +13,5 @@ recurse_compact(x)
 A list with \code{NULL} or empty list elements removed.
 }
 \description{
-Apply \code{purrr::compact()} recursively to drop \code{NULL} or empty list elements from a
-potentially nested list.
+Apply \code{purrr::compact()} recursively to drop \code{NULL} or empty list elements from a list.
 }

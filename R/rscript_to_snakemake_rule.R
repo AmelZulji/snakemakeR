@@ -49,6 +49,8 @@ build_rule <- function(
       "params is not named list" = is.list(params) && !is.null(names(params))
     )
 
+    params <- stats::setNames(params, nm = gsub(pattern = "\\.", replacement = "_", x = names(params)))
+
     out <-
       glue::glue(
         '{names(params)} = config["{rule_name}"]["{names(params)}"]'
@@ -125,6 +127,8 @@ write_config <- function(
   params <- stats::setNames(list(params), rule_name)
 
   x <- utils::modifyList(x, params)
+  x <- lapply(x, \(x) stats::setNames(x, nm = gsub(pattern = "\\.", replacement = "_", x = names(x)))) # make values syntactically python valid
+
   yaml::write_yaml(x = x, file = config_path)
 }
 

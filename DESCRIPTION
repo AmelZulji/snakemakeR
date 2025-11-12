@@ -1,12 +1,9 @@
 Package: snakemakeR
-Title: Generate Snakemake S4 Snippets for R Scripts
+Title: Consstruct snakemake rules from R scripts
 Version: 0.0.0.9000
 Authors@R: 
     person("Amel", "Zulji", , "zuljiamel1991@gmail.com", role = c("aut", "cre"))
-Description: Helpers for drafting Snakemake S4 boilerplate alongside R
-    analyses. Use 'build_snakemake_s4_snippet()' to retrieve the snippet as
-    text, or 'insert_snakemake_s4_snippet()' to add it directly to the active
-    RStudio editor.
+Description: Helpers for building snakemake rules and inserting them in the current snakemake workflow. Each R script starts with a mock S4 snakemake object from which the package pull all necessary infrmation for building and inserting the rules the rules.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

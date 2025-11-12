@@ -1,12 +1,10 @@
 #' Recursively compact a list
 #'
-#' Apply `purrr::compact()` recursively to drop `NULL` or empty list elements from a
-#' potentially nested list.
+#' Apply `purrr::compact()` recursively to drop `NULL` or empty list elements from a list.
 #'
 #' @param x A list, possibly containing nested lists.
 #'
 #' @return A list with `NULL` or empty list elements removed.
-#' @export
 recurse_compact <- function(x) {
   if (is.list(x)) {
     purrr::compact(purrr::map(x, recurse_compact))
@@ -30,14 +28,14 @@ recurse_flatten <- function(x) {
   }
 }
 
-#' Find matching calls within an expression
+#' Find a function call by its name in an expression
 #'
-#' Recursively walks through an expression and collects calls whose function name matches
+#' Recursively walks an expression and collects calls whose function name matches
 #' `fn_name`.
 #'
-#' @param x An expression to search.
+#' @param x An expression to be searched
 #'
-#' @param fn_name A string giving the function name to locate.
+#' @param fn_name A string giving the function name to be found
 #'
 #' @return A list of calls matching `fn_name`. Returns an empty list if no matches are found.
 #' @export
