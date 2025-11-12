@@ -1,6 +1,6 @@
 Package: snakemakeR
 Title: Consstruct snakemake rules from R scripts
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person("Amel", "Zulji", , "zuljiamel1991@gmail.com", role = c("aut", "cre"))
 Description: Helpers for building snakemake rules and inserting them in the current snakemake workflow. Each R script starts with a mock S4 snakemake object from which the package pull all necessary infrmation for building and inserting the rules the rules.
