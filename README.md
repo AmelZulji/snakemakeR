@@ -9,18 +9,8 @@
 coverage](https://codecov.io/gh/AmelZulji/snakemakeR/graph/badge.svg)](https://app.codecov.io/gh/AmelZulji/snakemakeR)
 <!-- badges: end -->
 
-`snakemakeR` helps R-first analysts capture the small but repetitive
-step of drafting a minimal Snakemake S4 scaffold. Instead of copying
-code between projects, you can generate a vetted snippet or paste it
-directly into the RStudio editor and immediately focus on the parts of
-the pipeline that matter.
-
-## Why snakemakeR?
-
-- Works entirely in R, making it easy to slot into existing scripts.
-- Keeps the S4 class definition in one helper so fixes stay in sync.
-- Provides both textual and RStudio editor helpers, depending on your
-  workflow.
+`snakemakeR` is workflow package helping to quickly write a snakemake
+rule for an R script
 
 ## Installation
 
@@ -42,9 +32,6 @@ The package is designed around a short feedback loop:
     `workflow/rules/`, and update `config/config.yaml`.
 3.  Include the generated rule from a `Snakefile` (done automatically
     via `include: "rules/<name>.smk"`).
-
-The snippet below mirrors `inst/extdata/compute_mean.R` and highlights
-the minimal structure the parser expects.
 
 ## Function highlights
 
