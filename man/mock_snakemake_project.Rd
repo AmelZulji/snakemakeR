@@ -7,10 +7,20 @@
 mock_snakemake_project(project_dir = "snakemake_project")
 }
 \arguments{
-\item{project_dir}{Directory where to write a mock snakemake project. Defaults to \code{./snakemake_project}.}
+\item{project_dir}{Path to the directory where the mock project should be
+created.}
+}
+\value{
+Invisibly returns \code{project_dir}.
 }
 \description{
 Helper for tests/examples that need a minimal Snakemake project layout.
-Creates a temporary directory (if none supplied) with a Snakefile and config
-file so utilities like \code{is_snakemake_project()} can run against it.
+Creates a minimal snakemake project into \code{project_dir}.
+}
+\examples{
+\dontrun{
+demo_dir <- file.path(tempdir(), "snakemake-demo")
+mock_snakemake_project(demo_dir)
+list.files(demo_dir, recursive = TRUE)
+}
 }

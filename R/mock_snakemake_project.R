@@ -1,10 +1,18 @@
 #' Create a mock Snakemake project structure
 #'
 #' Helper for tests/examples that need a minimal Snakemake project layout.
-#' Creates a temporary directory (if none supplied) with a Snakefile and config
-#' file so utilities like \code{is_snakemake_project()} can run against it.
+#' Creates a minimal snakemake project into `project_dir`.
 #'
-#' @param project_dir Directory where to write a mock snakemake project. Defaults to `./snakemake_project`.
+#' @param project_dir Path to the directory where the mock project should be
+#'   created.
+#'
+#' @return Invisibly returns `project_dir`.
+#' @examples
+#' \dontrun{
+#' demo_dir <- file.path(tempdir(), "snakemake-demo")
+#' mock_snakemake_project(demo_dir)
+#' list.files(demo_dir, recursive = TRUE)
+#' }
 #' @export
 mock_snakemake_project <- function(project_dir = "snakemake_project") {
 file_paths <- list(
@@ -67,11 +75,19 @@ file_paths <- list(
 
 #' Test if the directory is a snakemake project
 #'
-#' Searches the directory for the presence of Snakefile in root or in workflow.
+#' Searches the supplied directory for a `Snakefile` (either at the project
+#' root or under `workflow/`) and a configuration file (`config.yaml` or
+#' `config.yml` under `config/`). Both must be present for the function to
+#' return `TRUE`.
 #'
-#' @param directory directory to be checked
+#' @param directory Directory to be checked. Defaults to the current working directory.
 #'
-#' @returns logical of length 1
+#' @return Logical of length one indicating whether required files exist.
+#' @examples
+#' \dontrun{
+#' demo_dir <- mock_snakemake_project(tempfile("snakemake-demo-"))
+#' is_snakemake_project(demo_dir)
+#' }
 #' @export
 is_snakemake_project <- function(directory = ".") {
   path <- fs::path_abs(path)
@@ -89,11 +105,21 @@ is_snakemake_project <- function(directory = ".") {
 #'
 #' Helper that ensures the \code{Snakemake} S4 class is defined and returns a
 #' ready-to-use instance populated with demo-friendly defaults. This is useful
-#' for examples or tests that need a stand-in for the real Snakemake runtime.
+#' for examples or tests that need a stand-in for the real Snakemake runtime and
+#' for interactive development where the Python Snakemake runtime is not
+#' available.
 #'
 #' @param input,output,params Named list of inputs, output and parameters
 #'
-#' @return An object of class \code{Snakemake}.
+#' @return An object of class \code{Snakemake} with `input`, `output`, and
+#'   `params` slots populated from the provided lists.
+#' @examples
+#' snakemake <- create_snakemake_object(
+#'   input = list(raw = "data/sample.csv"),
+#'   output = list(clean = "results/sample_clean.csv"),
+#'   params = list(na_rm = TRUE)
+#' )
+#' snakemake@params$na_rm
 #' @export
 create_snakemake_object <- function(
   input = list(),

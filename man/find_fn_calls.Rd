@@ -16,5 +16,10 @@ A list in which each element contains the calls from the corresponding
 element of \code{x} that match \code{fn_name}.
 }
 \description{
-Apply \code{find_fn_call()} to each element of a list of expressions.
+A wrapper around \code{\link[=find_fn_call]{find_fn_call()}} that accepts a list of language
+objects (such as the result of \code{as.list(parse(script.R))}).
+}
+\examples{
+exprs <- as.list(parse(text = c("foo()", "bar(mean(x))")))
+find_fn_calls(exprs, fn_name = "mean")
 }

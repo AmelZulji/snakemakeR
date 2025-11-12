@@ -15,6 +15,7 @@ rscript_to_rule(script, rule_name = NULL)
 Invisibly returns \code{NULL}.
 }
 \description{
-Parses an R script that calls \code{create_snakemake_object()} and uses the
+Parses an R script that calls \code{\link[=create_snakemake_object]{create_snakemake_object()}} and uses the
 extracted metadata to write both a Snakemake rule file and a config entry.
+The generated rule is automatically included in \code{workflow/Snakefile}.
 }

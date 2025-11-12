@@ -17,6 +17,7 @@ write_rule(rule, rule_path, append = TRUE)
 Invisibly returns \code{rule_path}.
 }
 \description{
-Persists the character string returned by \code{\link[=build_rule]{build_rule()}} into a
-Snakefile. Directories along \code{path} are created if they do not exist.
+Appends the character string returned by \code{\link[=build_rule]{build_rule()}} into a
+\code{.smk} file. Directories along \code{rule_path} are created if they do
+not exist.
 }

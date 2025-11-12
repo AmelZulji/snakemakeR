@@ -5,6 +5,7 @@
 #' @param x A list, possibly containing nested lists.
 #'
 #' @return A list with `NULL` or empty list elements removed.
+#' @keywords internal
 recurse_compact <- function(x) {
   if (is.list(x)) {
     purrr::compact(purrr::map(x, recurse_compact))
@@ -30,14 +31,18 @@ recurse_flatten <- function(x) {
 
 #' Find a function call by its name in an expression
 #'
-#' Recursively walks an expression and collects calls whose function name matches
+#' Recursively walks a language object (the output of `parse()`, or
+#' `expression()`) and collects the calls whose function name matches
 #' `fn_name`.
 #'
-#' @param x An expression to be searched
-#'
-#' @param fn_name A string giving the function name to be found
+#' @param x A single expression, call, or other language object to be searched.
+#' @param fn_name A string giving the function name to be found.
 #'
 #' @return A list of calls matching `fn_name`. Returns an empty list if no matches are found.
+
+#' @examples
+#' expr <- parse(text = "mean(rnorm(5)) + sd(rnorm(5))")[[1]]
+#' find_fn_call(expr, fn_name = "mean")
 #' @export
 find_fn_call <- function(x, fn_name) {
   if (rlang::is_syntactic_literal(x)) {
@@ -81,13 +86,17 @@ find_fn_call <- function(x, fn_name) {
 
 #' Find matching calls in multiple expressions
 #'
-#' Apply `find_fn_call()` to each element of a list of expressions.
+#' A wrapper around [find_fn_call()] that accepts a list of language
+#' objects (such as the result of `as.list(parse(script.R))`).
 #'
 #' @param x A list of expressions or calls to search.
 #' @param fn_name A string giving the function name to locate.
 #'
 #' @return A list in which each element contains the calls from the corresponding
 #'   element of `x` that match `fn_name`.
+#' @examples
+#' exprs <- as.list(parse(text = c("foo()", "bar(mean(x))")))
+#' find_fn_calls(exprs, fn_name = "mean")
 #' @export
 find_fn_calls <- function(x, fn_name) {
   if (!is.list(x)) {

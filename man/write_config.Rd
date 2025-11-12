@@ -18,7 +18,8 @@ Invisibly returns \code{config_path}.
 }
 \description{
 Creates (or updates) a YAML configuration file with the parameters required
-by a specific rule. Missing directories are created automatically.
+by a specific rule. Missing directories are created automatically and field
+names are sanitised to keep them valid Python identifiers.
 }
 \examples{
 \dontrun{

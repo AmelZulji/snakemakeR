@@ -7,17 +7,33 @@
 build_rule(output, script, rule_name = NULL, input = NULL, params = NULL)
 }
 \arguments{
-\item{script}{Path to the script.}
+\item{script}{Path to the script that implements the rule's logic. Stored in the resulting rule via \verb{script:}.}
 
-\item{rule_name}{Explicit rule name. Defaults to the script file name without extension.}
+\item{rule_name}{Explicit rule name. Defaults to the \code{script} file name without extension.}
 
-\item{input, output}{Named lists pointing to input and output files.}
+\item{input, output}{Named lists pointing to input and output files to be declared in the rule body.}
 
-\item{params}{Named list of parameter.}
+\item{params}{Named list describing the parameter keys that should be read from \code{config}. The actual values are retrieved via \code{\link[=write_config]{write_config()}}.}
 }
 \value{
 A single character string containing the formatted rule.
 }
 \description{
-Convenience helper for writing a Snakemake rule from its components.
+Convenience helper for writing a Snakemake rule from its components. The
+function performs light validation (e.g. named lists for \code{input}/\code{output}) and
+produces a character scalar that can be written directly to a \code{.smk} file via
+\code{\link[=write_rule]{write_rule()}}.
+}
+\examples{
+\dontrun{
+build_rule(
+  script = "workflow/scripts/compute_mean.R",
+  input = list(raw = "data/sample_1.csv"),
+  output = list(result = "results/sample_1.csv"),
+  params = list(na_rm = TRUE)
+)
+}
+}
+\seealso{
+\code{\link[=write_rule]{write_rule()}}, \code{\link[=write_config]{write_config()}}, and \code{\link[=rscript_to_rule]{rscript_to_rule()}}.
 }

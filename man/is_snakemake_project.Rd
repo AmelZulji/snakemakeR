@@ -7,11 +7,20 @@
 is_snakemake_project(directory = ".")
 }
 \arguments{
-\item{directory}{directory to be checked}
+\item{directory}{Directory to be checked. Defaults to the current working directory.}
 }
 \value{
-logical of length 1
+Logical of length one indicating whether required files exist.
 }
 \description{
-Searches the directory for the presence of Snakefile in root or in workflow.
+Searches the supplied directory for a \code{Snakefile} (either at the project
+root or under \verb{workflow/}) and a configuration file (\code{config.yaml} or
+\code{config.yml} under \verb{config/}). Both must be present for the function to
+return \code{TRUE}.
+}
+\examples{
+\dontrun{
+demo_dir <- mock_snakemake_project(tempfile("snakemake-demo-"))
+is_snakemake_project(demo_dir)
+}
 }

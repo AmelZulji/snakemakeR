@@ -7,14 +7,19 @@
 find_fn_call(x, fn_name)
 }
 \arguments{
-\item{x}{An expression to be searched}
+\item{x}{A single expression, call, or other language object to be searched.}
 
-\item{fn_name}{A string giving the function name to be found}
+\item{fn_name}{A string giving the function name to be found.}
 }
 \value{
 A list of calls matching \code{fn_name}. Returns an empty list if no matches are found.
 }
 \description{
-Recursively walks an expression and collects calls whose function name matches
+Recursively walks a language object (the output of \code{parse()}, or
+\code{expression()}) and collects the calls whose function name matches
 \code{fn_name}.
+}
+\examples{
+expr <- parse(text = "mean(rnorm(5)) + sd(rnorm(5))")[[1]]
+find_fn_call(expr, fn_name = "mean")
 }

@@ -10,10 +10,21 @@ create_snakemake_object(input = list(), output = list(), params = list())
 \item{input, output, params}{Named list of inputs, output and parameters}
 }
 \value{
-An object of class \code{Snakemake}.
+An object of class \code{Snakemake} with \code{input}, \code{output}, and
+\code{params} slots populated from the provided lists.
 }
 \description{
 Helper that ensures the \code{Snakemake} S4 class is defined and returns a
 ready-to-use instance populated with demo-friendly defaults. This is useful
-for examples or tests that need a stand-in for the real Snakemake runtime.
+for examples or tests that need a stand-in for the real Snakemake runtime and
+for interactive development where the Python Snakemake runtime is not
+available.
+}
+\examples{
+snakemake <- create_snakemake_object(
+  input = list(raw = "data/sample.csv"),
+  output = list(clean = "results/sample_clean.csv"),
+  params = list(na_rm = TRUE)
+)
+snakemake@params$na_rm
 }

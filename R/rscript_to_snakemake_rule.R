@@ -1,12 +1,26 @@
 #' Build a Snakemake rule
 #'
-#' Convenience helper for writing a Snakemake rule from its components.
+#' Convenience helper for writing a Snakemake rule from its components. The
+#' function performs light validation (e.g. named lists for `input`/`output`) and
+#' produces a character scalar that can be written directly to a `.smk` file via
+#' [write_rule()].
 #'
-#' @param rule_name Explicit rule name. Defaults to the script file name without extension.
-#' @param input,output Named lists pointing to input and output files.
-#' @param params Named list of parameter.
-#' @param script Path to the script.
+#' @param rule_name Explicit rule name. Defaults to the `script` file name without extension.
+#' @param input,output Named lists pointing to input and output files to be declared in the rule body.
+#' @param params Named list describing the parameter keys that should be read from `config`. The actual values are retrieved via [write_config()].
+#' @param script Path to the script that implements the rule's logic. Stored in the resulting rule via `script:`.
+#'
 #' @return A single character string containing the formatted rule.
+#' @seealso [write_rule()], [write_config()], and [rscript_to_rule()].
+#' @examples
+#' \dontrun{
+#' build_rule(
+#'   script = "workflow/scripts/compute_mean.R",
+#'   input = list(raw = "data/sample_1.csv"),
+#'   output = list(result = "results/sample_1.csv"),
+#'   params = list(na_rm = TRUE)
+#' )
+#' }
 #' @export
 build_rule <- function(
   output,
@@ -76,12 +90,14 @@ build_rule <- function(
 
 #' Write a Snakemake rule
 #'
-#' Persists the character string returned by [build_rule()] into a
-#' Snakefile. Directories along `path` are created if they do not exist.
+#' Appends the character string returned by [build_rule()] into a 
+#' `.smk` file. Directories along `rule_path` are created if they do
+#' not exist.
 #'
 #' @param rule Character scalar containing the rule definition.
 #' @param rule_path File path to which rule should be written.
 #' @param append Logical; append to an existing file (`TRUE`, default) or overwrite it (`FALSE`).
+#'
 #' @return Invisibly returns `rule_path`.
 #' @export
 write_rule <- function(rule, rule_path, append = TRUE) {
@@ -94,11 +110,13 @@ write_rule <- function(rule, rule_path, append = TRUE) {
 #' Write or update a config entry corresponding to a Snakemake rule
 #'
 #' Creates (or updates) a YAML configuration file with the parameters required
-#' by a specific rule. Missing directories are created automatically.
+#' by a specific rule. Missing directories are created automatically and field
+#' names are sanitised to keep them valid Python identifiers.
 #'
 #' @param rule_name Character scalar used as the key in the configuration file.
 #' @param params Named list of parameter values associated with `rule_name`.
 #' @param config_path File path to the YAML configuration file.
+#'
 #' @return Invisibly returns `config_path`.
 #' @export
 #' @examples
@@ -134,11 +152,13 @@ write_config <- function(
 
 #' Generate snakemake rule from R script.
 #'
-#' Parses an R script that calls `create_snakemake_object()` and uses the
+#' Parses an R script that calls [create_snakemake_object()] and uses the
 #' extracted metadata to write both a Snakemake rule file and a config entry.
+#' The generated rule is automatically included in `workflow/Snakefile`.
 #'
 #' @param script Path to the source R script.
 #' @param rule_name Optional explicit rule name; defaults to the script filename without extension.
+#'
 #' @return Invisibly returns `NULL`.
 #' @export
 rscript_to_rule <- function(script, rule_name = NULL) {
