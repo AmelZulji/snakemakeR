@@ -150,3 +150,39 @@ create_snakemake_object <- function(
     params = params
   )
 }
+
+#' Insert a Snakemake CSO Snippet into the Current RStudio Document
+#'
+#' This helper function inserts a predefined code snippet that constructs
+#' a minimal `create_snakemake_object()` call. It is intended to speed up
+#' interactive development when working inside RStudio.
+#'
+#' The function requires RStudio and uses the `rstudioapi` package to insert
+#' text at the current cursor position. If RStudio is not available, it
+#' throws an error.
+#'
+#' @return Invisibly returns the inserted snippet as a character string.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' insert_cso_snippet()
+#' }
+insert_cso_snippet <- function() {
+  if (!rstudioapi::isAvailable()) {
+    stop(
+      "rstudioapi is not available. Run this function from within RStudio.",
+      call. = FALSE
+    )
+  }
+
+  snippet <- 'snakemake <- create_snakemake_object(
+    input = list(input1 = ""),
+    params = list(param1 = ""),
+    output = list(output1 = "")
+)
+
+'
+rstudioapi::insertText(text = snippet)
+invisible(snippet)
+}
