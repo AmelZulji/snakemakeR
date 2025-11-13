@@ -2,8 +2,10 @@
 
 export(build_rule)
 export(create_snakemake_object)
+export(expand_inline)
 export(find_fn_call)
 export(find_fn_calls)
+export(insert_cso_snippet)
 export(is_snakemake_project)
 export(mock_snakemake_project)
 export(rscript_to_rule)

@@ -17,4 +17,5 @@ Imports:
     methods,
     purrr,
     rlang,
+    rstudioapi,
     yaml
