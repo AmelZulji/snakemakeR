@@ -88,9 +88,100 @@ build_rule <- function(
   )
 }
 
+#' Build a Snakemake rule
+#'
+#' Convenience helper for writing a Snakemake rule from its components. The
+#' function performs light validation (e.g. named lists for `input`/`output`) and
+#' produces a character scalar that can be written directly to a `.smk` file via
+#' [write_rule()].
+#'
+#' @param rule_name Explicit rule name. Defaults to the `script` file name without extension.
+#' @param input,output Named lists pointing to input and output files to be declared in the rule body.
+#' @param params Named list describing the parameter keys that should be read from `config`. The actual values are retrieved via [write_config()].
+#' @param script Path to the script that implements the rule's logic. Stored in the resulting rule via `script:`.
+#'
+#' @return A single character string containing the formatted rule.
+#' @seealso [write_rule()], [write_config()], and [rscript_to_rule()].
+#' @examples
+#' \dontrun{
+#' build_rule(
+#'   script = "workflow/scripts/compute_mean.R",
+#'   input = list(raw = "data/sample_1.csv"),
+#'   output = list(result = "results/sample_1.csv"),
+#'   params = list(na_rm = TRUE)
+#' )
+#' }
+#' @export
+build_rule2 <- function(
+    output,
+    script,
+    rule_name = NULL,
+    input = NULL,
+    params = NULL
+) {
+  stopifnot("script doesnt exists" = fs::file_exists(script))
+
+  rule_name <- rule_name %||% script |> fs::path_file() |> fs::path_ext_remove()
+  rule_name_fmt <- glue::glue("rule {rule_name}:")
+
+  input_fmt <- if (!is.null(input)) {
+    stopifnot(
+      "input is not named list" = is.list(input) && !is.null(names(input))
+    )
+    input <- purrr::map(input, auto_expand_paths)
+    out <-
+      glue::glue('{names(input)} = "{input}"') |>
+      glue::glue_collapse(sep = ", ")
+
+    glue::glue("input: {out}")
+  }
+
+  output_fmt <- if (!is.null(output)) {
+    stopifnot(
+      "output is not named list" = is.list(output) && !is.null(names(output))
+    )
+    output <- purrr::map(output, auto_expand_paths)
+    out <-
+      glue::glue('{names(output)} = "{output}"') |>
+      glue::glue_collapse(sep = ", ")
+
+    glue::glue("output: {out}")
+  }
+
+  params_fmt <- if (!is.null(params)) {
+    stopifnot(
+      "params is not named list" = is.list(params) && !is.null(names(params))
+    )
+
+    params <- stats::setNames(params, nm = gsub(pattern = "\\.", replacement = "_", x = names(params)))
+
+    out <-
+      glue::glue(
+        '{names(params)} = config["{rule_name}"]["{names(params)}"]'
+      ) |>
+      glue::glue_collapse(sep = ", ")
+
+    glue::glue("params: {out}")
+  }
+
+  script_rel_path <- fs::path_rel(script, start = "workflow/rules/")
+  script_fmt <- if (!is.null(script)) {
+    glue::glue(
+      'script: "{script_rel_path}"'
+    ) |>
+      glue::glue_collapse(sep = ", ")
+  }
+
+  glue::glue_collapse(
+    c(rule_name_fmt, input_fmt, params_fmt, output_fmt, script_fmt),
+    sep = "\n\t"
+  )
+}
+
+
 #' Write a Snakemake rule
 #'
-#' Appends the character string returned by [build_rule()] into a 
+#' Appends the character string returned by [build_rule()] into a
 #' `.smk` file. Directories along `rule_path` are created if they do
 #' not exist.
 #'
@@ -168,7 +259,7 @@ rscript_to_rule <- function(script, rule_name = NULL) {
   cso_call <- find_fn_calls(x = exp, fn_name = "create_snakemake_object")
   stopifnot("no `create_snakemake_object` calls were found" = length(cso_call) == 1)
   out <- cso_call |> _[[1]] |> rlang::call_args()
-  rule <- rlang::expr(build_rule(rule_name = rule_name, script = script, !!!out)) |> eval()
+  rule <- rlang::expr(build_rule2(rule_name = rule_name, script = script, !!!out)) |> eval()
   write_rule(rule = rule, rule_path = rule_path)
   rlang::expr(write_config(rule_name = rule_name, params = !!!out["params"])) |>
     eval()
