@@ -63,7 +63,10 @@ build_rule <- function(
       "params is not named list" = is.list(params) && !is.null(names(params))
     )
 
-    params <- stats::setNames(params, nm = gsub(pattern = "\\.", replacement = "_", x = names(params)))
+    params <- stats::setNames(
+      params,
+      nm = gsub(pattern = "\\.", replacement = "_", x = names(params))
+    )
 
     out <-
       glue::glue(
@@ -113,11 +116,11 @@ build_rule <- function(
 #' }
 #' @export
 build_rule2 <- function(
-    output,
-    script,
-    rule_name = NULL,
-    input = NULL,
-    params = NULL
+  output,
+  script,
+  rule_name = NULL,
+  input = NULL,
+  params = NULL
 ) {
   stopifnot("script doesnt exists" = fs::file_exists(script))
 
@@ -128,7 +131,7 @@ build_rule2 <- function(
     stopifnot(
       "input is not named list" = is.list(input) && !is.null(names(input))
     )
-    input <- purrr::map(input, auto_expand_paths)
+    input <- purrr::map(input, generalize_path)
     out <-
       glue::glue('{names(input)} = "{input}"') |>
       glue::glue_collapse(sep = ", ")
@@ -140,7 +143,7 @@ build_rule2 <- function(
     stopifnot(
       "output is not named list" = is.list(output) && !is.null(names(output))
     )
-    output <- purrr::map(output, auto_expand_paths)
+    output <- purrr::map(output, generalize_path)
     out <-
       glue::glue('{names(output)} = "{output}"') |>
       glue::glue_collapse(sep = ", ")
@@ -153,7 +156,10 @@ build_rule2 <- function(
       "params is not named list" = is.list(params) && !is.null(names(params))
     )
 
-    params <- stats::setNames(params, nm = gsub(pattern = "\\.", replacement = "_", x = names(params)))
+    params <- stats::setNames(
+      params,
+      nm = gsub(pattern = "\\.", replacement = "_", x = names(params))
+    )
 
     out <-
       glue::glue(
@@ -225,7 +231,9 @@ write_config <- function(
   config_path = "config/config.yaml",
   rule_name = NULL
 ) {
-  stopifnot("`params` is not a named list" = is.list(params) && rlang::is_named(params))
+  stopifnot(
+    "`params` is not a named list" = is.list(params) && rlang::is_named(params)
+  )
 
   if (fs::file_exists(config_path) && !fs::is_file_empty(config_path)) {
     x <- yaml::read_yaml(config_path)
@@ -236,7 +244,12 @@ write_config <- function(
   params <- stats::setNames(list(params), rule_name)
 
   x <- utils::modifyList(x, params)
-  x <- lapply(x, \(x) stats::setNames(x, nm = gsub(pattern = "\\.", replacement = "_", x = names(x)))) # make values syntactically python valid
+  x <- lapply(x, \(x) {
+    stats::setNames(
+      x,
+      nm = gsub(pattern = "\\.", replacement = "_", x = names(x))
+    )
+  }) # make values syntactically python valid
 
   yaml::write_yaml(x = x, file = config_path)
 }
@@ -257,9 +270,16 @@ rscript_to_rule <- function(script, rule_name = NULL) {
   rule_path <- glue::glue("workflow/rules/{rule_name}.smk")
   exp <- parse(script) |> as.list()
   cso_call <- find_fn_calls(x = exp, fn_name = "create_snakemake_object")
-  stopifnot("no `create_snakemake_object` calls were found" = length(cso_call) == 1)
+  stopifnot(
+    "no `create_snakemake_object` calls were found" = length(cso_call) == 1
+  )
   out <- cso_call |> _[[1]] |> rlang::call_args()
-  rule <- rlang::expr(build_rule2(rule_name = rule_name, script = script, !!!out)) |> eval()
+  rule <- rlang::expr(build_rule2(
+    rule_name = rule_name,
+    script = script,
+    !!!out
+  )) |>
+    eval()
   write_rule(rule = rule, rule_path = rule_path)
   rlang::expr(write_config(rule_name = rule_name, params = !!!out["params"])) |>
     eval()

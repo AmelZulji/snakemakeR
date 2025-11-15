@@ -15,44 +15,44 @@
 #' }
 #' @export
 mock_snakemake_project <- function(project_dir = "snakemake_project") {
-file_paths <- list(
-  snakefile_path = list(
-    source = system.file("extdata", c("Snakefile"), package = "snakemakeR"),
-    destination = file.path(project_dir, "workflow")
-  ),
-  config_path = list(
-    source = system.file(
-      "extdata",
-      c("config.yaml", "sample_metadata.csv"),
-      package = "snakemakeR"
+  file_paths <- list(
+    snakefile_path = list(
+      source = system.file("extdata", c("Snakefile"), package = "snakemakeR"),
+      destination = file.path(project_dir, "workflow")
     ),
-    destination = file.path(project_dir, "config")
-  ),
-  script_path = list(
-    source = system.file(
-      "extdata",
-      c("compute_mean.R"),
-      package = "snakemakeR"
+    config_path = list(
+      source = system.file(
+        "extdata",
+        c("config.yaml", "sample_metadata.csv"),
+        package = "snakemakeR"
+      ),
+      destination = file.path(project_dir, "config")
     ),
-    destination = file.path(project_dir, "workflow/scripts")
-  ),
-  rule_path = list(
-    source = system.file(
-      "extdata",
-      c("compute_mean.smk"),
-      package = "snakemakeR"
+    script_path = list(
+      source = system.file(
+        "extdata",
+        c("compute_mean.R"),
+        package = "snakemakeR"
+      ),
+      destination = file.path(project_dir, "workflow/scripts")
     ),
-    destination = file.path(project_dir, "workflow/rules")
-  ),
-  data_path = list(
-    source = system.file(
-      "extdata",
-      c("sample_1.csv", "sample_2.csv", "sample_3.csv"),
-      package = "snakemakeR"
+    rule_path = list(
+      source = system.file(
+        "extdata",
+        c("compute_mean.smk"),
+        package = "snakemakeR"
+      ),
+      destination = file.path(project_dir, "workflow/rules")
     ),
-    destination = file.path(project_dir, "data")
+    data_path = list(
+      source = system.file(
+        "extdata",
+        c("sample_1.csv", "sample_2.csv", "sample_3.csv"),
+        package = "snakemakeR"
+      ),
+      destination = file.path(project_dir, "data")
+    )
   )
-)
   # lapply(file_paths, \(x) {
   #   fs::dir_create(x[["destination"]], recurse = TRUE)
   #   fs::file_copy(path = x[["source"]], new_path = x[["destination"]])
@@ -67,7 +67,6 @@ file_paths <- list(
     # fs::dir_create(x[["destination"]], recurse = TRUE)
     fs::file_copy(path = x[["source"]], new_path = x[["destination"]])
   })
-
 
   invisible(project_dir)
 }
@@ -183,6 +182,6 @@ insert_cso_snippet <- function() {
 )
 
 '
-rstudioapi::insertText(text = snippet)
-invisible(snippet)
+  rstudioapi::insertText(text = snippet)
+  invisible(snippet)
 }

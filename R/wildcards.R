@@ -1,4 +1,4 @@
-#' Extract wildcard name from `expand()` calls
+#' Extract wildcard name from `expand()` calls.
 #'
 #' Parses a set of script files, finds the first wildcard argument that appears
 #' inside an `expand()` call, and returns its name. Missing files trigger a
@@ -13,9 +13,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' extract_expand_wildcard(c("scriptA.R", "scriptB.R"))
+#' extract_expand_wildcard(c("workflow/Snakefile", "workflow/rules/compute_mean.smk"))
 #' }
-extract_expand_wildcard <- function(files = c("workflow/Snakefile", Sys.glob("workflow/rules/*.smk"))) {
+get_wildcard <- function(
+  files = c("workflow/Snakefile", Sys.glob("workflow/rules/*.smk"))
+) {
   file_check <- fs::file_exists(files)
   if (!any(file_check)) {
     stop("Provided `files` do not exist")
@@ -35,7 +37,7 @@ extract_expand_wildcard <- function(files = c("workflow/Snakefile", Sys.glob("wo
   matches <- stringr::str_match(
     string = lines,
     pattern = "expand\\(.*,\\s*(?<wildcard>.*?)\\s*="
-    )[,"wildcard"]
+  )[, "wildcard"]
 
   wildcards <- unique(matches[!is.na(matches)])
 
@@ -52,7 +54,6 @@ extract_expand_wildcard <- function(files = c("workflow/Snakefile", Sys.glob("wo
 }
 
 
-
 #' Reads all project metadata files from the config/ directory.
 #'
 #' @return A list of tibbles, one for each .csv file found.
@@ -60,16 +61,18 @@ read_project_meta <- function() {
   possible_meta <- Sys.glob("config/*.csv")
   stopifnot("no meta file found in config/" = length(possible_meta) >= 1)
 
-  meta <- purrr::map(possible_meta, \(x) readr::read_csv(x, show_col_types = FALSE))
+  meta <- purrr::map(possible_meta, \(x) {
+    readr::read_csv(x, show_col_types = FALSE)
+  })
   meta
 }
 
-#' Finds which parts (tokens) of a path string are present in the metadata.
+#' Find which path tokens are variable.
 #'
 #' @param path_string A single character string for the path.
 #' @param meta The list of metadata tibbles.
 #' @return A character vector of matching tokens.
-which_path_expendable <- function(path_string, meta) {
+get_variable_path_token <- function(path_string, meta) {
   stopifnot(is.character(path_string), length(path_string) == 1)
   stopifnot(is.list(meta))
 
@@ -100,9 +103,7 @@ expand_path <- function(path_string, pattern, replacement) {
   stringr::str_replace_all(path_string, pattern, replacement)
 }
 
-
-
-#' Automatically expands file paths based on project metadata.
+#' Generalize path based on project metadata.
 #'
 #' This function takes a vector of file paths and checks them against
 #' the project's metadata. If a path contains a token found in the
@@ -115,22 +116,25 @@ expand_path <- function(path_string, pattern, replacement) {
 #' @param wildcard_name The project's wildcard (from `extract_expand_wildcard()`).
 #'
 #' @return A character vector of processed paths.
-auto_expand_paths <- function(path_strings, meta = read_project_meta(), wildcard_name = extract_expand_wildcard()) {
+#' @return A character vector of processed paths.
+generalize_path <- function(
+  path_string,
+  meta = read_project_meta(),
+  wildcard = get_wildcard()
+) {
+  wildcard_fmt <- paste0("{", wildcard, "}")
 
-  # 1. Create the replacement string (e.g., "{sample}")
-  replacement_string <- paste0("{", wildcard_name, "}")
-
-  # 2. Use map_chr to run the logic on every path
-  processed_paths <- purrr::map_chr(path_strings, ~ {
-
-    # 3. Find which tokens to replace (e.g., "sample_2")
-    # This will be character(0) if no match
-    pattern_to_replace <- which_path_expendable(.x, meta)
-
-    # 4. Replace them. If pattern_to_replace is character(0),
-    # this returns the original path (.x)
-    expand_path(.x, pattern_to_replace, replacement_string)
-  })
+  processed_paths <- purrr::map_chr(
+    path_string,
+    ~ {
+      variable_path_token <- get_variable_path_token(.x, meta)
+      if (length(variable_path_token) == 0) {
+        .x
+      } else {
+        stringr::str_replace(.x, variable_path_token, wildcard_fmt)
+      }
+    }
+  )
 
   return(processed_paths)
 }

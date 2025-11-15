@@ -65,4 +65,3 @@ expand_inline <- function(expr) {
 
   invisible(value)
 }
-

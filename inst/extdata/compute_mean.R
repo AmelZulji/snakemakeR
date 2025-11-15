@@ -16,7 +16,10 @@ library(readr, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
 
 sample_data <- read_csv(snakemake@input$input1, show_col_types = FALSE)
-sample_mean <- sample_data |> summarise(.by = sample_name, mean = mean(var1, na.rm = snakemake@params$na_rm))
+sample_mean <- sample_data |>
+  summarise(
+    .by = sample_name,
+    mean = mean(var1, na.rm = snakemake@params$na_rm)
+  )
 
 write_csv(sample_mean, file = snakemake@output$output1)
-
