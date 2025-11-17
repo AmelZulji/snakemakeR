@@ -50,7 +50,7 @@ test_that("get_wildcard warns when multiple wildcards found", {
 
 test_that("get_wildcard warns when no wildcards present", {
   # character() included to create empty file
-  path <- withr::local_tempfile(lines = c('some random text'))
+  path <- withr::local_tempfile(lines = c("some random text"))
   expect_warning(
     get_wildcard(files = c(path)),
     regexp = "No wildcard found. Returning empty character"

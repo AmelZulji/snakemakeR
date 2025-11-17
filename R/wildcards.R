@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' extract_expand_wildcard(c("workflow/Snakefile", "workflow/rules/compute_mean.smk"))
+#' get_wildcard(c("workflow/Snakefile", "workflow/rules/compute_mean.smk"))
 #' }
 get_wildcard <- function(
   files = c("workflow/Snakefile", Sys.glob("workflow/rules/*.smk"))
@@ -24,7 +24,6 @@ get_wildcard <- function(
   }
   if (!all(file_check)) {
     warning("Following file do not exist: ", files[!file_check])
-    # warning("Following file do not exist: ")
   }
 
   valid_files <- files[file_check]
