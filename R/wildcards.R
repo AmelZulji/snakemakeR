@@ -108,14 +108,13 @@ expand_path <- function(path_string, pattern, replacement) {
 #' This function takes a vector of file paths and checks them against
 #' the project's metadata. If a path contains a token found in the
 #' metadata (e.g., "sample_1"), it replaces that token with the
-#' project's wildcard (e.g., "{sample}"). If no token matches, the
+#' project's wildcard (e.g., "\{sample\}"). If no token matches, the
 #' path is returned unchanged.
 #'
-#' @param path_strings A character vector of file paths to process.
+#' @param path_string A character vector of file paths to process.
 #' @param meta The pre-loaded metadata (from `read_project_meta()`).
-#' @param wildcard_name The project's wildcard (from `extract_expand_wildcard()`).
+#' @param wildcard The project's wildcard (from `extract_expand_wildcard()`).
 #'
-#' @return A character vector of processed paths.
 #' @return A character vector of processed paths.
 generalize_path <- function(
   path_string,

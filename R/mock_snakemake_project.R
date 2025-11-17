@@ -175,11 +175,13 @@ insert_cso_snippet <- function() {
     )
   }
 
-  snippet <- 'snakemake <- create_snakemake_object(
-    input = list(input1 = ""),
-    params = list(param1 = ""),
-    output = list(output1 = "")
-)
+  snippet <- 'if (interactive()) {
+  snakemake <- create_snakemake_object(
+    input = list(in1 = "data/sti_1.csv"),
+    params = list(bar_col = "blue", bar_fill = "green2",nbins = 10),
+    output = list(out1 = "results/histogram/sti_1.png")
+  )
+}
 
 '
   rstudioapi::insertText(text = snippet)
