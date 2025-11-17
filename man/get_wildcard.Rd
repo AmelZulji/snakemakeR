@@ -21,6 +21,6 @@ warning and are ignored; empty or wildcard-free files return \code{character()}.
 }
 \examples{
 \dontrun{
-extract_expand_wildcard(c("workflow/Snakefile", "workflow/rules/compute_mean.smk"))
+get_wildcard(c("workflow/Snakefile", "workflow/rules/compute_mean.smk"))
 }
 }
